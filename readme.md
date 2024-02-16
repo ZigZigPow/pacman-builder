@@ -7,7 +7,7 @@ This project is a Python-based Pac-Man game using Pygame, featuring customizable
 - **Simple Controls:** Use arrow keys for movement and the space bar to use Pac-Man's tongue.
 - **Customizable Levels**: Modify the game's maze by editing a simple text file.
 - **Dynamic Ghost AI**: Ghosts randomly navigate the maze, adding unpredictability to each game.
-- **Dot and Power Pellet Collection**: Collect dots and power pellets while avoiding ghosts.
+- **Dot Collection**: Collect dots while avoiding ghosts.
 - **Custom Sounds and Graphics**: Includes themed sounds and colorful graphics for an immersive experience.
 
 ## Installation
