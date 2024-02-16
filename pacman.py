@@ -45,9 +45,14 @@ with open('maze.txt', 'r', encoding='utf-8') as file: # https://asciiflow.com/le
         for char in line:
             if  char == '\n':
                 break
-            if char != ' ':
-                # This character represents a wall
+            elif char == '@':
+                pacman_x, pacman_y = x, y
+            elif char == 'U':
+                ghost_x, ghost_y = x, y
+            elif char != ' ':
+                # Set this as the initial location of the pacman
                 maze_walls.append(pygame.Rect(x, y, wall_thickness, wall_thickness))
+            
             x += wall_thickness
         if x > max_x:
             max_x = x
@@ -70,24 +75,24 @@ def will_collide_with_walls(next_rect, walls):
 
 
 # Find a valid starting position for Pac-Man that is not inside a wall
-pacman_x, pacman_y = None, None
-while pacman_x is None or pacman_y is None:
-    temp_x = random.randint(pacman_radius, screen_width - pacman_radius)
-    temp_y = random.randint(pacman_radius, screen_height - pacman_radius)
-    temp_rect = pygame.Rect(temp_x - pacman_radius, temp_y - pacman_radius, pacman_radius * 2, pacman_radius * 2)
-    if not will_collide_with_walls(temp_rect, maze_walls):
-        pacman_x, pacman_y = temp_x, temp_y
+# pacman_x, pacman_y = None, None
+# while pacman_x is None or pacman_y is None:
+#     temp_x = random.randint(pacman_radius, screen_width - pacman_radius)
+#     temp_y = random.randint(pacman_radius, screen_height - pacman_radius)
+#     temp_rect = pygame.Rect(temp_x - pacman_radius, temp_y - pacman_radius, pacman_radius * 2, pacman_radius * 2)
+#     if not will_collide_with_walls(temp_rect, maze_walls):
+#         pacman_x, pacman_y = temp_x, temp_y
 
 
-    # Ghost settings
+# Ghost settings
 ghost_color = blue
 ghost_radius = pacman_radius
-while True:
-    ghost_x = random.randint(wall_thickness, screen_width - wall_thickness)
-    ghost_y = random.randint(wall_thickness, screen_height - wall_thickness)
-    ghost_rect = pygame.Rect(ghost_x - ghost_radius, ghost_y - ghost_radius, ghost_radius * 2, ghost_radius * 2)
-    if not will_collide_with_walls(ghost_rect, maze_walls):
-        break
+# while True:
+#     ghost_x = random.randint(wall_thickness, screen_width - wall_thickness)
+#     ghost_y = random.randint(wall_thickness, screen_height - wall_thickness)
+#     ghost_rect = pygame.Rect(ghost_x - ghost_radius, ghost_y - ghost_radius, ghost_radius * 2, ghost_radius * 2)
+#     if not will_collide_with_walls(ghost_rect, maze_walls):
+#         break
 
 
 directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
@@ -99,7 +104,7 @@ def random_walk_ghost(ghost_x, ghost_y, maze_walls, last_direction):
     if will_collide_with_walls(
             pygame.Rect(
                 ghost_x + last_direction[0] * movement_speed - ghost_radius,
-                ghost_y + last_direction[1] * movement_speed - ghost_radius,
+                ghost_y + last_direction[1] * movement_speed - 2 * ghost_radius,
                 ghost_radius * 2,
                 ghost_radius * 2),
             maze_walls) or random.random() < change_direction_prob:
