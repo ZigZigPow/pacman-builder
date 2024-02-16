@@ -1,14 +1,15 @@
-# Customizable Pac-Man Game
 
-This project is a Python-based Pac-Man game using Pygame, featuring customizable levels that users can edit with any text editor. The game is designed for those who wish to explore game development with Python and have a personalized gaming experience by modifying or creating new levels.
+# Customizable Pac-Man Game 🕹️
+
+This project is a Python-based Pac-Man 😀 game using Pygame, featuring customizable levels that users can edit with any text editor. The game is designed for those who wish to explore game development with Python and have a personalized gaming experience by modifying or creating new levels.
 
 ## Features
 
-- **Simple Controls:** Use arrow keys for movement and the space bar to use Pac-Man's tongue.
-- **Customizable Levels**: Modify the game's maze by editing a simple text file.
-- **Dynamic Ghost AI**: Ghosts randomly navigate the maze, adding unpredictability to each game.
-- **Dot Collection**: Collect dots while avoiding ghosts.
-- **Custom Sounds and Graphics**: Includes themed sounds and colorful graphics for an immersive experience.
+- 🎮 **Simple Controls:** Use arrow keys for movement and the space bar to use Pac-Man's tongue.
+- 🌽 **Customizable Maze**: Modify the game's maze by editing a simple text file.
+- 👻 **Dynamic Ghost AI**: Ghosts randomly navigate the maze, adding unpredictability to each game.
+- 😀 **Dot Collection**: Collect dots while avoiding ghosts.
+- 🎵 **Custom Sounds and Graphics**: Includes themed sounds and colorful graphics for an immersive experience.
 
 ## Installation
 
@@ -53,4 +54,17 @@ To create your own unique maze for the Pac-Man game, follow these steps:
 
 5. **Test Your Maze**: Run the game to see your new maze in action. Make adjustments as needed to perfect your design.
 
-Enjoy designing your own mazes for Pac-Man to navigate!
+Enjoy designing your own mazes for Pac-Man to navigate! 🎮👻
+```
+     .-"""""-.
+    /         \
+    |         |
+    |         |
+    | )\ _ /(|
+    \(_~\ /~_)/
+     \(=^Y^=)/
+     _\) (`  /_
+    {   |
+ .-""`-`.-""-._
+`-..._____...-'
+```
