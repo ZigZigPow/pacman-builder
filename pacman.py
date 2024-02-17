@@ -18,12 +18,18 @@ black = (0, 0, 0)
 yellow = (255, 255, 0)
 blue = (0, 0, 255)
 pink = (255, 105, 180)
-
+red = (255, 0, 0)
 
 
 # Pac-Man settings
 pacman_radius = 15
 movement_speed = 0.23
+
+
+ghost_white_time = 5000  # Time in milliseconds for the ghost to be white after eating a power pellet
+ghost_eaten_time = 3000  # Time in milliseconds for the ghost to be eaten
+
+
 
 # Wall settings
 wall_thickness = 20
@@ -74,25 +80,42 @@ def will_collide_with_walls(next_rect, walls):
 
 
 
-# Find a valid starting position for Pac-Man that is not inside a wall
-# pacman_x, pacman_y = None, None
-# while pacman_x is None or pacman_y is None:
-#     temp_x = random.randint(pacman_radius, screen_width - pacman_radius)
-#     temp_y = random.randint(pacman_radius, screen_height - pacman_radius)
-#     temp_rect = pygame.Rect(temp_x - pacman_radius, temp_y - pacman_radius, pacman_radius * 2, pacman_radius * 2)
-#     if not will_collide_with_walls(temp_rect, maze_walls):
-#         pacman_x, pacman_y = temp_x, temp_y
-
 
 # Ghost settings
-ghost_color = blue
+ghost_color = red
 ghost_radius = pacman_radius
-# while True:
-#     ghost_x = random.randint(wall_thickness, screen_width - wall_thickness)
-#     ghost_y = random.randint(wall_thickness, screen_height - wall_thickness)
-#     ghost_rect = pygame.Rect(ghost_x - ghost_radius, ghost_y - ghost_radius, ghost_radius * 2, ghost_radius * 2)
-#     if not will_collide_with_walls(ghost_rect, maze_walls):
-#         break
+
+# Dot settings
+dot_radius = 5
+# Initialize dots
+dots = []
+for x in range(wall_thickness * 2, screen_width - wall_thickness * 2, wall_thickness * 2):
+    for y in range(wall_thickness * 2, screen_height - wall_thickness * 2, wall_thickness * 2):
+        dot_rect = pygame.Rect(x - dot_radius + wall_thickness, y - dot_radius + wall_thickness, dot_radius * 2, dot_radius * 2)
+        if not will_collide_with_walls(dot_rect, maze_walls):
+            dots.append(dot_rect)
+
+
+dots_original = dots.copy()
+
+power_pellet_radius = 10
+power_pellet = None
+
+def create_power_pellet():
+    while True:
+        chosen_dot = random.choice(dots_original)
+        power_pellet_x, power_pellet_y = chosen_dot.center
+        power_pellet_rect = pygame.Rect(
+            power_pellet_x - power_pellet_radius,
+            power_pellet_y - power_pellet_radius,
+            power_pellet_radius * 2,
+            power_pellet_radius * 2,
+        )
+        if not will_collide_with_walls(power_pellet_rect, maze_walls) and not power_pellet_rect.colliderect(pygame.Rect(pacman_x - pacman_radius, pacman_y - pacman_radius, pacman_radius * 2, pacman_radius * 2)): 
+            return power_pellet_rect
+
+
+power_pellet = create_power_pellet()
 
 
 directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
@@ -120,20 +143,16 @@ def random_walk_ghost(ghost_x, ghost_y, maze_walls, last_direction):
 # Game loop flag
 running = True
 
-
-
-# Dot settings
-dot_radius = 5
-# Initialize dots in the middle of each cell in the maze
-dots = []
-for x in range(wall_thickness, screen_width - wall_thickness, pacman_radius * 3):
-    for y in range(wall_thickness, screen_height - wall_thickness, pacman_radius * 3):
-        dot_rect = pygame.Rect(x - dot_radius, y - dot_radius, dot_radius * 2, dot_radius * 2)
-        if not will_collide_with_walls(dot_rect, maze_walls):
-            dots.append(dot_rect)
+ghost_is_eaten = False
+ghost_revival_time = 0
 
 # Main game loop
 while running:
+
+    if pygame.time.get_ticks() > ghost_revival_time:
+        ghost_is_eaten = False
+        ghost_color = red
+
     # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -195,10 +214,20 @@ while running:
         if temp_rect.colliderect(dot) or (tongue_rect and tongue_rect.colliderect(dot)):
             dots.remove(dot)
             pygame.mixer.Sound('pac.mp3').play(maxtime=50)
+
+    if temp_rect.colliderect(power_pellet) or (tongue_rect and tongue_rect.colliderect(power_pellet)):
+        # pygame.mixer.Sound('power-pellet.mp3').play()
+        ghost_color = white
+        ghost_revival_time = pygame.time.get_ticks() + ghost_white_time
+        if dots:
+            power_pellet = create_power_pellet()
+        else:
+            power_pellet = pygame.Rect(-100, -100, 0, 0)
+
     
     # Draw dots
     for dot in dots:
-        pygame.draw.circle(screen, yellow, dot.center, dot_radius)
+        pygame.draw.circle(screen, white, dot.center, dot_radius)
     
     # Draw Pac-Man
     pygame.draw.circle(screen, yellow, (pacman_x, pacman_y), pacman_radius)
@@ -224,30 +253,32 @@ while running:
 
     # Move ghost
     ghost_x, ghost_y, last_direction = random_walk_ghost(ghost_x, ghost_y, maze_walls, last_direction)
+    
+    if not ghost_is_eaten:
+        # Draw ghost
+        # Shape of the ghost body
+        g_ghost_body = [
+            (ghost_x - ghost_radius, ghost_y),
+            (ghost_x - ghost_radius, ghost_y - ghost_radius * 2),
+            (ghost_x + ghost_radius, ghost_y - ghost_radius * 2),
+            (ghost_x + ghost_radius, ghost_y),
+        ]
 
-    # Draw ghost
-    # Shape of the ghost body
-    g_ghost_body = [
-        (ghost_x - ghost_radius, ghost_y),
-        (ghost_x - ghost_radius, ghost_y - ghost_radius * 2),
-        (ghost_x + ghost_radius, ghost_y - ghost_radius * 2),
-        (ghost_x + ghost_radius, ghost_y),
-    ]
+        # Shape of the ghost base (wavy)
+        base_width = int(ghost_radius * 2 / 5)
+        base_height = ghost_radius // 2
+        g_ghost_base = []
+        for i in range(5):
+            offset = base_height if i % 2 == 0 else 0
+            g_ghost_base.append((ghost_x - ghost_radius + i * base_width, ghost_y + offset))
+        g_ghost_base.append((ghost_x + ghost_radius, ghost_y))
 
-    # Shape of the ghost base (wavy)
-    base_width = int(ghost_radius * 2 / 5)
-    base_height = ghost_radius // 2
-    g_ghost_base = []
-    for i in range(5):
-        offset = base_height if i % 2 == 0 else 0
-        g_ghost_base.append((ghost_x - ghost_radius + i * base_width, ghost_y + offset))
-    g_ghost_base.append((ghost_x + ghost_radius, ghost_y))
+    if not ghost_is_eaten:
+        # Draw ghost body
+        pygame.draw.polygon(screen, ghost_color, g_ghost_body)
 
-    # Draw ghost body
-    pygame.draw.polygon(screen, ghost_color, g_ghost_body)
-
-    # Draw ghost base
-    pygame.draw.lines(screen, ghost_color, False, g_ghost_base, base_height)
+        # Draw ghost base
+        pygame.draw.lines(screen, ghost_color, False, g_ghost_base, base_height)
 
     # Draw ghost eyes
     eye_x = ghost_x - ghost_radius // 2
@@ -262,6 +293,9 @@ while running:
     pygame.draw.circle(screen, black, (pupil_x, pupil_y), pupil_radius)
     pygame.draw.circle(screen, black, (pupil_x + ghost_radius - pupil_radius, pupil_y), pupil_radius)
 
+    # Draw power pellet
+    pygame.draw.circle(screen, white, power_pellet.center, power_pellet_radius)
+
     # inside the main game loop
     seconds = (pygame.time.get_ticks() - start_ticks) / 1000  # Calculate how many seconds
 
@@ -275,14 +309,18 @@ while running:
     pygame.display.flip()
 
     if pygame.Rect(ghost_x - ghost_radius, ghost_y - ghost_radius, ghost_radius * 2, ghost_radius * 2).colliderect(pygame.Rect(pacman_x - pacman_radius, pacman_y - pacman_radius, pacman_radius * 2, pacman_radius * 2)):
-        death_font = pygame.font.SysFont('Arial', 36)
-        death_text = death_font.render('You Died!', True, white)
-        death_rect = death_text.get_rect(center=(screen_width // 2, screen_height // 2))
-        screen.blit(death_text, death_rect)
-        pygame.mixer.Sound('lose.mp3').play()
-        pygame.display.flip()
-        pygame.time.wait(3000)
-        running = False
+        if ghost_color == white:
+            ghost_is_eaten = True
+            ghost_revival_time = pygame.time.get_ticks() + ghost_eaten_time
+        else:
+            death_font = pygame.font.SysFont('Arial', 36)
+            death_text = death_font.render('You Died!', True, white)
+            death_rect = death_text.get_rect(center=(screen_width // 2, screen_height // 2))
+            screen.blit(death_text, death_rect)
+            pygame.mixer.Sound('lose.mp3').play()
+            pygame.display.flip()
+            pygame.time.wait(3000)
+            running = False
 
     if not dots:
         winning_font = pygame.font.SysFont('Arial', 36)
