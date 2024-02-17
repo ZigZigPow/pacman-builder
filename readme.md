@@ -57,3 +57,12 @@ To create your own unique maze for the Pac-Man game, follow these steps:
 5. **Test Your Maze**: Run the game to see your new maze in action. Make adjustments as needed to perfect your design.
 
 Enjoy designing your own mazes for Pac-Man to navigate! 🎮👻
+
+```
+  ___         _       _ _            __           _     _          __                       _               _   
+ |_ _|   __ _(_)_ __ ( ) |_    __ _ / _|_ __ __ _(_) __| |   ___  / _|  _ __   ___     __ _| |__   ___  ___| |_ 
+  | |   / _` | | '_ \|/| __|  / _` | |_| '__/ _` | |/ _` |  / _ \| |_  | '_ \ / _ \   / _` | '_ \ / _ \/ __| __|
+  | |  | (_| | | | | | | |_  | (_| |  _| | | (_| | | (_| | | (_) |  _| | | | | (_) | | (_| | | | | (_) \__ \ |_ 
+ |___|  \__,_|_|_| |_|  \__|  \__,_|_| |_|  \__,_|_|\__,_|  \___/|_|   |_| |_|\___/   \__, |_| |_|\___/|___/\__|
+                                                                                      |___/ 
+```
