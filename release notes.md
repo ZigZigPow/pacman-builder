@@ -17,7 +17,7 @@ To create your own unique maze for the Pac-Man game, follow these steps:
 
 1. **Edit the Maze**: Open `pacman_game\_internal\mazes\maze.txt` with any text editor. The maze is represented by characters:
    - ` ` (space) for paths where the Pac-Man and the Ghost can move.
-   - `@` sfor initial pacman location.
+   - `@` for initial pacman location.
    - `U` for initial ghost locations.
    - Any other character for wall blocks.
 
