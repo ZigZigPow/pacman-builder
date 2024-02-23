@@ -9,7 +9,7 @@
 - 🎵 **Custom Sounds and Graphics**: Includes themed sounds and colorful graphics for an immersive experience.
 
 ## Installation
-Just unzip the file and run `pacman_game\packman.exe`
+Just unzip `pacman_game.zip` the file and run `pacman_game\packman.exe`
 
 ## Customizing the Maze
 
