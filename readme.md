@@ -12,6 +12,10 @@ Currently we support running it on Windows. If you want to run it on other syste
 - 😀 **Dot Collection**: Collect dots while avoiding ghosts.
 - 🎵 **Custom Sounds and Graphics**: Includes themed sounds and colorful graphics for an immersive experience.
 
+# Windows Download
+
+To play on windows, get it from here: https://github.com/ZigZigPow/pacman-builder/releases
+
 # For developers:
 
 ## Prerequisites:
