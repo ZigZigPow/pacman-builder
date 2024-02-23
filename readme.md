@@ -2,6 +2,7 @@
 # Customizable Pac-Man Game 🕹️
 
 This project is a Python-based Pac-Man 😀 game using Pygame, featuring customizable levels that users can edit with any text editor. The game is designed for those who wish to explore game development with Python and have a personalized gaming experience by modifying or creating new levels.
+Currently we support running it on Windows. If you want to run it on other systems you'll have to figure it out.
 
 ## Features
 
@@ -11,30 +12,25 @@ This project is a Python-based Pac-Man 😀 game using Pygame, featuring customi
 - 😀 **Dot Collection**: Collect dots while avoiding ghosts.
 - 🎵 **Custom Sounds and Graphics**: Includes themed sounds and colorful graphics for an immersive experience.
 
-## Installation
+# For developers:
 
-Before running the game, you must have Python and Pygame installed on your system. Here's how to get started:
+## Prerequisites:
+1. git
+2. python 3.9 or 3.10 (Maybe later versions will also work).
 
-1. **Install Python**
+## Setup
+1. Clone the repo  
+`git clone https://github.com/ZigZigPow/pacman-builder.git`
+2. Run setup_venv.bat
+3. Run build.bat
 
-   Ensure Python is installed on your system. You can download it from [python.org](https://www.python.org/downloads/).
+## Running the Game
+After setup the game will be available at:  
+`pacman-builder\pacman_game\pacman.exe`  
+or use python: navigate to the repo in command prompt and run the game with:
 
-2. **Install Pygame**
-
-   Pygame is required to run the game. Install it using pip:
-
-```bash
-pip install pygame
 ```
-
-3. **Download the Game**
-
-Clone this repository or download the game files to your local machine.
-
-4. **Running the Game**
-After installation, navigate to the game directory in your terminal or command prompt and run the game with:
-
-```bash
+activate.bat
 python pacman.py
 ```
 
@@ -42,12 +38,10 @@ python pacman.py
 
 To create your own unique maze for the Pac-Man game, follow these steps:
 
-1. **Locate the Maze File**: Find the `maze.txt` file in the game's directory. This file contains the layout of the maze.
-
-2. **Edit the Maze**: Open `maze.txt` with a text editor. The maze is represented by characters:
-   - ` ` (space) for paths where the Pac-Man and the Ghost can move.
-   - `@` ﻿for initial pacman location.
-   - `U` ﻿for initial ghost locations.
+1. **Edit the Maze**: Open `mazes\maze.txt` or (`pacman-builder\pacman_game\_internal\mazes\maze.txt` for the built package) with a text editor. The maze is represented by characters:
+   - ` ` s(space) for paths where the Pac-Man and the Ghost can move.
+   - `@` sfor initial pacman location.
+   - `U` for initial ghost locations.
    - Any other character for wall blocks.
 
 3. **Design Your Maze**: Modify the arrangement of characters to shape your new maze. Be creative! Ensure there are no enclosed areas where Pac-Man or ghosts can get trapped.

@@ -2,6 +2,11 @@ import pygame
 import sys
 import random
 
+import os
+
+if os.path.exists("_internal"):
+    os.chdir("_internal")
+
 # Initialize clock
 pygame_clock = pygame.time.Clock()
 start_ticks = pygame.time.get_ticks()  # Starter tick
@@ -10,7 +15,6 @@ white = (255, 255, 255)
 
 # Initialize Pygame
 pygame.init()
-
 
 
 # Colors
@@ -30,7 +34,6 @@ ghost_white_time = 5000  # Time in milliseconds for the ghost to be white after 
 ghost_eaten_time = 3000  # Time in milliseconds for the ghost to be eaten
 
 
-
 # Wall settings
 wall_thickness = 20
 gate_width = 50  # Width of the gate
@@ -38,13 +41,13 @@ corridor_width = 6 * pacman_radius
 tile_side = corridor_width + 1 * wall_thickness
 
 # play background music
-pygame.mixer.music.load('theme.mp3')
+pygame.mixer.music.load('sounds\\theme.mp3')
 pygame.mixer.music.play(-1)
 
 
 maze_walls = []
 max_x = 0
-with open('maze.txt', 'r', encoding='utf-8') as file: # https://asciiflow.com/legacy/
+with open('mazes\\maze.txt', 'r', encoding='utf-8') as file: # https://asciiflow.com/legacy/
     y = 0
     for line in file:
         x = 0
@@ -77,8 +80,6 @@ def will_collide_with_walls(next_rect, walls):
         if next_rect.colliderect(wall):
             return True
     return False
-
-
 
 
 # Ghost settings
@@ -120,7 +121,7 @@ power_pellet = create_power_pellet()
 
 directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 last_direction = random.choice(directions)
-    
+
 
 def random_walk_ghost(ghost_x, ghost_y, maze_walls, last_direction):
     change_direction_prob = 0.001  # Probability to change direction at random
@@ -213,10 +214,10 @@ while running:
     for dot in dots[:]:
         if temp_rect.colliderect(dot) or (tongue_rect and tongue_rect.colliderect(dot)):
             dots.remove(dot)
-            pygame.mixer.Sound('pac.mp3').play(maxtime=50)
+            pygame.mixer.Sound('sounds\\pac.mp3').play(maxtime=50)
 
     if temp_rect.colliderect(power_pellet) or (tongue_rect and tongue_rect.colliderect(power_pellet)):
-        # pygame.mixer.Sound('power-pellet.mp3').play()
+        # pygame.mixer.Sound('sounds\\power-pellet.mp3').play()
         ghost_color = white
         ghost_revival_time = pygame.time.get_ticks() + ghost_white_time
         if dots:
@@ -317,7 +318,7 @@ while running:
             death_text = death_font.render('You Died!', True, white)
             death_rect = death_text.get_rect(center=(screen_width // 2, screen_height // 2))
             screen.blit(death_text, death_rect)
-            pygame.mixer.Sound('lose.mp3').play()
+            pygame.mixer.Sound('sounds\\lose.mp3').play()
             pygame.display.flip()
             pygame.time.wait(3000)
             running = False
@@ -327,7 +328,7 @@ while running:
         winning_text = winning_font.render('You Win!', True, yellow)
         winning_rect = winning_text.get_rect(center=(screen_width // 2, screen_height // 2))
         screen.blit(winning_text, winning_rect)
-        pygame.mixer.Sound('level-win-6416.mp3').play()
+        pygame.mixer.Sound('sounds\\level-win-6416.mp3').play()
         pygame.display.flip()
         pygame.time.wait(3000)
 
